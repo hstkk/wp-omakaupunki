@@ -22,11 +22,17 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="Oma kaupunkki" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <my:Map Grid.Row="1" Margin="12,0,12,0" x:Name="map" CopyrightVisibility="Collapsed"/>
+        <my:Map Grid.Row="1"
+                Margin="12,0,12,0"
+                x:Name="map"
+                CopyrightVisibility="Collapsed"
+                CredentialsProvider="ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS"
+                ZoomBarVisibility="Visible"
+                ZoomLevel="15"/>
     </Grid>
  
     <phone:PhoneApplicationPage.ApplicationBar>
