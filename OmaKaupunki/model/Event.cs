@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Device.Location;
 using System.Runtime.Serialization;
+using Microsoft.Phone.Controls.Maps;
 
 namespace OmaKaupunki.model
 {
@@ -61,6 +62,14 @@ namespace OmaKaupunki.model
             this.endTime = end_time;
             this.createdAt = created_at;
             coordinate = new GeoCoordinate(lat, lon);
+        }
+
+        public Pushpin toPushpin(){
+            Pushpin pushpin = new Pushpin();
+            //pushpin.Location = new GeoCoordinate(lat, lon);
+            pushpin.Tag = id;
+            pushpin.Content = title;
+            return pushpin;
         }
     }
 }

@@ -29,11 +29,12 @@ http://api.omakaupunki.fi/v1/event/search?start_date=2012-04-12&category=9&api_k
  * http://msdn.microsoft.com/en-us/library/system.runtime.serialization.datacontractjsonserializer%28v=VS.90%29.aspx?appId=Dev10IDEF1&l=EN-US&k=k%28DATACONTRACTJSONSERIALIZER%29&rd=true
  * http://msdn.microsoft.com/en-us/library/system.runtime.serialization.json.datacontractjsonserializer%28v=vs.95%29.aspx
  * http://msdn.microsoft.com/en-us/library/bb412179.aspx
- * /
+ */
 namespace OmaKaupunki.controller
 {
     public class Dataprovider
     {
+        private const string APIKEY = "262d6328-82f7-11e1-a468-000c29f7271d";
         public void test(){
             Categories category = downloadCategories(new Uri("http://api.omakaupunki.fi/v1/event/categories?api_key=262d6328-82f7-11e1-a468-000c29f7271d"));
             MessageBox.Show((category!=null)? "ok": "EPIC FAIL!!!");
@@ -63,8 +64,8 @@ namespace OmaKaupunki.controller
                 MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(e.Result));
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Categories));
                 Categories categories = (Categories)serializer.ReadObject(memoryStream);
-                if(categories == null)
-                    throw exception;
+                //if(categories == null)
+                    //throw exception;
             }
             catch(Exception ex) {
                 //TODO error
