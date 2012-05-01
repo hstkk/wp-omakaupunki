@@ -13,6 +13,7 @@ using Microsoft.Phone.Controls;
 using OmaKaupunki.controller;
 using OmaKaupunki.model;
 using System.Windows.Navigation;
+using System.Linq;
 
 
 namespace OmaKaupunki.views
@@ -33,25 +34,15 @@ namespace OmaKaupunki.views
 
             if (NavigationContext.QueryString.TryGetValue("id", out tmp) && int.TryParse(tmp, out id))
             {
-                switch (id)
+                Menu menu = (from m in App.menu
+                            where m.id == id
+                            select m).First();
+                if (menu != null)
                 {
-                    case 9:
-                        PageTitle.Text = "elokuvat";
-                        break;
-                    case 2:
-                        PageTitle.Text = "keikat";
-                        break;
-                    case 10:
-                        PageTitle.Text = "klubit";
-                        break;
-                    case 8:
-                        PageTitle.Text = "näyttelyt";
-                        break;
-                    case 7:
-                        PageTitle.Text = "teatterit";
-                        break;
+                    PageTitle.Text = menu.title.ToLower();
+                    events = dataprovider.getEvents(id);
+                    longListSelector.DataContext = events.toList(menu);
                 }
-                events = dataprovider.getEvents(id);
             }
             else
             {

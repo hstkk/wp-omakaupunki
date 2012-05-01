@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace OmaKaupunki.model
 {
@@ -16,11 +17,11 @@ namespace OmaKaupunki.model
     public class Events
     {
         [DataMember]
-        Pagination[] pagination;
+        public List<Pagination> pagination;
         [DataMember]
-        Event[] data;
+        public List<Event> data;
 
-        public Event[] toList()
+        public List<Event> toList(Menu menu)
         {
             return data;
         }

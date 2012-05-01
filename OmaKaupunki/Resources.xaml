@@ -16,4 +16,7 @@
                        VerticalAlignment="Bottom"/>
         </Grid>
     </DataTemplate>
+    <ItemsPanelTemplate x:Key="wrap">
+        <toolkit:WrapPanel/>
+    </ItemsPanelTemplate>
 </ResourceDictionary>

@@ -30,30 +30,9 @@
             <ListBox Grid.Row="1"
                      Margin="12,0,12,0"
                      SelectionChanged="listBox_SelectionChanged"
+                     ItemTemplate="{StaticResource Category}"
                      Name="listBox"
-                     ItemsSource="{Binding}">
-                <!--<toolkit:WrapPanel>-->
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                    <toolkit:WrapPanel>
-
-                        <Grid Width="173"
-              Height="173"
-              Margin="12,12,0,0"
-              Background="{StaticResource PhoneAccentBrush}"
-              toolkit:TiltEffect.IsTiltEnabled="True">
-                            <Image Source="{Binding url}"
-                   Margin="12,12,12,12"/>
-                            <TextBlock Text="{Binding title}"
-                       Style="{StaticResource PhoneTextNormalStyle}"
-                       Foreground="White"
-                       Margin="12,12,12,12"
-                       VerticalAlignment="Bottom"/>
-                        </Grid>
-                </toolkit:WrapPanel>
-                </DataTemplate>
-                    </ListBox.ItemTemplate>
-                <!--</toolkit:WrapPanel>-->
-            </ListBox>
+                     ItemsSource="{Binding}"
+                     ItemsPanel="{StaticResource wrap}"/>
     </Grid>
 </phone:PhoneApplicationPage>

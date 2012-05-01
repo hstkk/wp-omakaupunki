@@ -16,10 +16,10 @@ namespace OmaKaupunki.model
     public class Pagination
     {
         [DataMember]
-        int total;
+        public int total;
         [DataMember]
-        int page;
+        public int page;
         [DataMember]
-        int pagesize;
+        public int pagesize;
     }
 }
