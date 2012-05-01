@@ -8,18 +8,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace OmaKaupunki.model
 {
-    [DataContract]
     public class Pagination
     {
-        [DataMember]
+        [DefaultValue(-1)]
         public int total;
-        [DataMember]
+        [DefaultValue(-1)]
         public int page;
-        [DataMember]
+        [DefaultValue(-1)]
         public int pagesize;
     }
 }
