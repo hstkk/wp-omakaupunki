@@ -35,7 +35,53 @@ namespace OmaKaupunki.controller
     public class Dataprovider
     {
         private const string APIKEY = "262d6328-82f7-11e1-a468-000c29f7271d";
-        public void test(){
+        private const string APIURL = "http://api.omakaupunki.fi/v1/event/";
+        private const string STARTTIMEFORMAT = "yyyy-MM-dd";
+        private string startTime;
+
+        public Dataprovider()
+        {
+            startTime = (DateTime.Now).ToString(STARTTIMEFORMAT);
+        }
+
+        public Events getEvents(int gategory)
+        {
+            return downloadEvents(gategory);
+        }
+
+        private Events downloadEvents(int gategory)
+        {
+            Events events = new Events();
+            try
+            {
+                WebClient webClient = new WebClient();
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadEventsCompleted);
+                webClient.DownloadStringAsync(new Uri(APIURL + "search?api_key=" + APIKEY + "&category=" + gategory + "&start_date=" + startTime));
+            }
+            catch
+            {
+                MessageBox.Show("Can not download events");
+            }
+            return events;
+        }
+
+        private void downloadEventsCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            try
+            {
+                MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(e.Result));
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Events));
+                Events events = (Events)serializer.ReadObject(memoryStream);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+
+
+/*        public void test(){
             Categories category = downloadCategories(new Uri("http://api.omakaupunki.fi/v1/event/categories?api_key=262d6328-82f7-11e1-a468-000c29f7271d"));
             MessageBox.Show((category!=null)? "ok": "EPIC FAIL!!!");
         }
@@ -83,7 +129,7 @@ namespace OmaKaupunki.controller
                 /*foreach (Beacon b in list)
                 {
                     RideList.Add(new RideDataModel { Date = b.Timestamp.ToString(), Description = b.Description, Distance = b.DistanceFromCustomer.ToString(), Name = b.Id.ToString(), Location = string.Format("{0},{1}", b.Location.Latitude.ToString(), b.Location.Longitude.ToString()), Address = b.Location.Address });
-                }*/
+                }*//*
                 MessageBox.Show((categories.Count != 0) ? "ok" : "EPIC FAIL!!!");
 
                 MessageBox.Show(e.Result);
@@ -92,6 +138,6 @@ namespace OmaKaupunki.controller
             {
                 //TODO error
             }
-        }
+        }*/
     }
 }
