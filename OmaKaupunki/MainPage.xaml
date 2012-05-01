@@ -31,7 +31,6 @@
                 x:Name="map"
                 CopyrightVisibility="Collapsed"
                 CredentialsProvider="ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS"
-                ZoomBarVisibility="Visible"
                 ZoomLevel="15"/>
     </Grid>
  

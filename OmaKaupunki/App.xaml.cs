@@ -12,11 +12,20 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using OmaKaupunki.model;
 
 namespace OmaKaupunki
 {
     public partial class App : Application
     {
+        public static List<Menu> menu = new List<Menu>(){
+            new Menu("Elokuvat", 9),
+            new Menu("Keikat", 2),
+            new Menu("Klubit", 10),
+            new Menu("Näyttelyt", 8),
+            new Menu("Teatterit", 7)
+        };
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>

@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using OmaKaupunki.model;
 
 namespace OmaKaupunki.views
 {
@@ -18,6 +19,7 @@ namespace OmaKaupunki.views
         public Categories()
         {
             InitializeComponent();
+            DataContext = App.menu;
         }
 
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -26,10 +28,9 @@ namespace OmaKaupunki.views
             if (listBox.SelectedIndex == -1 || listBox.SelectedItem == null)
                 return;
 
-            ListBoxItem listBoxItem = listBox.SelectedItem as ListBoxItem;
-            string tag = (string)listBoxItem.Tag;
+            Menu menu = listBox.SelectedItem as Menu;
 
-            MessageBox.Show(tag);
+            MessageBox.Show(menu.id.ToString());
             int id;
 /*            if(int.TryParse((listbox.SelectedItem as ListBoxItem).Tag.ToString(), out id))
                 NavigationService.Navigate(new Uri("/Views/Browse.xaml?id=" + id, UriKind.Relative));
