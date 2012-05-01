@@ -59,14 +59,11 @@ namespace OmaKaupunki
         public MainPage()
         {
             InitializeComponent();
-            map.ZoomLevel = 15;
             watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
             watcher.MovementThreshold = 20;
             watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(onStatusChanged);
             watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(onPositionChanged);
             watcher.Start();
-            controller.Dataprovider dataprovider = new controller.Dataprovider();
-            dataprovider.test();
         }
 
         private void onStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -110,27 +107,22 @@ namespace OmaKaupunki
         private void onPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             map.Center = e.Position.Location;
+            watcher.Stop();
         }
 
         private void nearMe(object sender, EventArgs e)
         {
             watcher.Start();
-            //centerMap();
         }
 
         private void browse(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/browse.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/views/Categories.xaml", UriKind.Relative));
         }
 
         private void search(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/search.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/views/Search.xaml", UriKind.Relative));
         }
-
-        /*private void centerMap()
-        {
-            map.Center = userLocation;
-        }*/
     }
 }

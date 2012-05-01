@@ -19,5 +19,10 @@ namespace OmaKaupunki.model
         Pagination[] pagination;
         [DataMember]
         Event[] data;
+
+        public Event[] toList()
+        {
+            return data;
+        }
     }
 }
