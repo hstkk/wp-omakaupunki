@@ -41,7 +41,9 @@ namespace OmaKaupunki.views
                 {
                     PageTitle.Text = menu.title.ToLower();
                     events = dataprovider.getEvents(id);
-                    longListSelector.DataContext = events.toList(menu);
+                    List<model.Event> data = events.toList();
+                    if(data == null)
+                        err.Visibility = System.Windows.Visibility.Visible;
                 }
             }
             else

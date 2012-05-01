@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using OmaKaupunki.model;
 using System.Collections.ObjectModel;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
 
 /**
  * http://api.omakaupunki.fi/v1/event?api_key=262d6328-82f7-11e1-a468-000c29f7271d
@@ -69,12 +69,11 @@ namespace OmaKaupunki.controller
         {
             try
             {
-                MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(e.Result));
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Events));
-                Events events = (Events)serializer.ReadObject(memoryStream);
+                Events events = JsonConvert.DeserializeObject<Events>(e.Result);
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString());
             }
         }
 
