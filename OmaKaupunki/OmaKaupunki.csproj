@@ -73,7 +73,12 @@
     <Compile Include="controller\Dataprovider.cs" />
     <Compile Include="model\Categories.cs" />
     <Compile Include="model\Events.cs" />
+    <Compile Include="model\Menu.cs" />
     <Compile Include="model\Pagination.cs" />
+    <Page Include="Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="views\Browse.xaml.cs">
       <DependentUpon>Browse.xaml</DependentUpon>
     </Compile>
