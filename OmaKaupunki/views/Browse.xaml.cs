@@ -11,18 +11,13 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 
-namespace OmaKaupunki
+namespace OmaKaupunki.views
 {
     public partial class Browse : PhoneApplicationPage
     {
         public Browse()
         {
             InitializeComponent();
-        }
-
-        private void search(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/search.xaml?pivot.SelectedIndex=" + pivot.SelectedIndex, UriKind.Relative));
         }
     }
 }

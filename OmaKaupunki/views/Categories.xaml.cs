@@ -11,11 +11,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 
-namespace OmaKaupunki
+namespace OmaKaupunki.views
 {
-    public partial class EventResults : PhoneApplicationPage
+    public partial class Categories : PhoneApplicationPage
     {
-        public EventResults()
+        public Categories()
         {
             InitializeComponent();
         }
