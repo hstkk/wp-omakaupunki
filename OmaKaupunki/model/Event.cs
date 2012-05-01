@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Device.Location;
 using System.Runtime.Serialization;
 using Microsoft.Phone.Controls.Maps;
+using System.Windows.Media.Imaging;
 
 namespace OmaKaupunki.model
 {
@@ -18,29 +19,31 @@ namespace OmaKaupunki.model
     public class Event
     {
         [DataMember]
-        int id;
+        public int id;
         [DataMember]
-        string title;
+        public string title;
         [DataMember]
-        string body;
+        public string body;
         [DataMember]
-        string url;
+        public string url;
         [DataMember]
-        DateTime startTime;
+        public long start_time;
         [DataMember]
-        DateTime endTime;
+        public long end_time;
         [DataMember]
-        DateTime createdAt;
+        public long created_at;
         [DataMember]
-        GeoCoordinate coordinate;
+        public double lat;
         [DataMember]
-        int venue;
+        public double lon;
+        [DataMember]
+        public int venue;
 
         public Event()
         {
         }
 
-        public Event(int id, string title, string body, string url, DateTime start_time, DateTime end_time, DateTime created_at, double lat, double lon, int venue)
+        /*public Event(int id, string title, string body, string url, DateTime start_time, DateTime end_time, DateTime created_at, double lat, double lon, int venue)
         {
             this.id = id;
             this.title = title;
@@ -62,13 +65,22 @@ namespace OmaKaupunki.model
             this.endTime = end_time;
             this.createdAt = created_at;
             coordinate = new GeoCoordinate(lat, lon);
-        }
+        }*/
 
-        public Pushpin toPushpin(){
+        public Pushpin toPushpin(Menu menu){
+            ImageBrush imageBrush = new ImageBrush();
+            imageBrush.ImageSource = new BitmapImage(menu.url);
+
             Pushpin pushpin = new Pushpin();
-            //pushpin.Location = new GeoCoordinate(lat, lon);
+            pushpin.Location = new GeoCoordinate(lat, lon);
             pushpin.Tag = id;
-            pushpin.Content = title;
+            pushpin.Content = new Rectangle()
+            {
+                Fill = imageBrush,
+                StrokeThickness = 0,
+                Height = 48,
+                Width = 48
+            };
             return pushpin;
         }
     }

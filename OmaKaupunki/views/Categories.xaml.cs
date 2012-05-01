@@ -29,12 +29,8 @@ namespace OmaKaupunki.views
                 return;
 
             Menu menu = listBox.SelectedItem as Menu;
+            NavigationService.Navigate(new Uri("/Views/Browse.xaml?id=" + menu.id, UriKind.Relative));
 
-            MessageBox.Show(menu.id.ToString());
-            int id;
-/*            if(int.TryParse((listbox.SelectedItem as ListBoxItem).Tag.ToString(), out id))
-                NavigationService.Navigate(new Uri("/Views/Browse.xaml?id=" + id, UriKind.Relative));
-*/
             // Reset selected index to -1 (no selection)
             listBox.SelectedIndex = -1;
         }
