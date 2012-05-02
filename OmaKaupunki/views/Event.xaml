@@ -62,7 +62,7 @@
                             x:Name="map"
                             CopyrightVisibility="Collapsed"
                             CredentialsProvider="ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS"
-                            ZoomLevel="10"
+                            ZoomLevel="13"
                             LogoVisibility="Collapsed"/>
                 </Grid>
             </controls:PivotItem>

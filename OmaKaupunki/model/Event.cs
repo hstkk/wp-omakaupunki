@@ -57,14 +57,11 @@ namespace OmaKaupunki.model
 
 
         public Pushpin toPushpin(Menu menu){
-            double tmpLat = 0, tmpLon = 0;
-            double.TryParse(lat.ToString(), out tmpLat);
-            double.TryParse(lon.ToString(), out tmpLon);
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(menu.url);
             
             Pushpin pushpin = new Pushpin();
-            pushpin.Location = new GeoCoordinate(tmpLat, tmpLon);
+            pushpin.Location = toGeoCoordinate();
             pushpin.Tag = id;
             pushpin.Content = new Rectangle()
             {
@@ -73,6 +70,14 @@ namespace OmaKaupunki.model
                 Height = 48,
                 Width = 48
             };
+            return pushpin;
+        }
+
+        public Pushpin toPushpin()
+        {
+            Pushpin pushpin = new Pushpin();
+            pushpin.Location = toGeoCoordinate();
+            pushpin.Content = title;
             return pushpin;
         }
 

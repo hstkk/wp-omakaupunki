@@ -24,10 +24,17 @@ namespace OmaKaupunki
     {
         int id;
         string uri = "";
+        GeoCoordinateWatcher watcher;
+        bool first = true;
+        Pushpin pushpin;
 
         public Event()
         {
             InitializeComponent();
+            watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
+            watcher.MovementThreshold = 20;
+            watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(onPositionChanged);
+            watcher.Start();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -80,14 +87,10 @@ namespace OmaKaupunki
 
                     GeoCoordinate geoCoordinate = e.toGeoCoordinate();
 
-                    Pushpin pushpin = new Pushpin();
-                    pushpin.Location = geoCoordinate;
                     smallMap.Center = geoCoordinate;
-                    smallMap.Children.Add(pushpin);
+                    smallMap.Children.Add(e.toPushpin());
 
-                    Pushpin pushpin2 = new Pushpin();
-                    pushpin2.Location = geoCoordinate;
-                    map.Children.Add(pushpin2);
+                    map.Children.Add(e.toPushpin());
                 }
             }
             catch (Exception exc)
@@ -109,6 +112,19 @@ namespace OmaKaupunki
                 webBrowserTask.Uri = new Uri(uri, UriKind.Absolute);
                 webBrowserTask.Show();
             }
+        }
+
+        private void onPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        {
+            if (first)
+            {
+                pushpin = new Pushpin();
+                pushpin.Content = "Minä";
+                map.Children.Add(pushpin);
+                first = false;
+            }
+            map.Center = e.Position.Location;
+            pushpin.Location = e.Position.Location;
         }
     }
 }
