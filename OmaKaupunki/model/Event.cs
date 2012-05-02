@@ -56,9 +56,10 @@ namespace OmaKaupunki.model
         }
 
 
-        public Pushpin toPushpin(Menu menu){
+        public Pushpin toPushpin(Uri url)
+        {
             ImageBrush imageBrush = new ImageBrush();
-            imageBrush.ImageSource = new BitmapImage(menu.url);
+            imageBrush.ImageSource = new BitmapImage(url);
             
             Pushpin pushpin = new Pushpin();
             pushpin.Location = toGeoCoordinate();

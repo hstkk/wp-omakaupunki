@@ -21,17 +21,17 @@ namespace OmaKaupunki.model
         //public Pagination[] pagination;
         public Event[] data;
 
-        public ObservableCollection<Pushpin> toList(Menu menu)
+        public ObservableCollection<Pushpin> toList(Uri url)
         {
             ObservableCollection<Pushpin> pushpins = new ObservableCollection<Pushpin>();
-            if (data != null && menu != null)
+            if (data != null && url != null)
             {
                 data = (from e in data
                         where e.show()
                         orderby e.start_time
                         select e).ToArray<Event>();
                 foreach(Event e in data)
-                    pushpins.Add(e.toPushpin(menu));
+                    pushpins.Add(e.toPushpin(url));
             }
             return pushpins;
         }

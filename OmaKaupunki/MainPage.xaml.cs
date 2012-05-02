@@ -17,37 +17,11 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using Microsoft.Phone.Controls.Maps;
 
-/*
- * usb stroage http://forum.xda-developers.com/showthread.php?t=1069568
- * 
- * http://msdn.microsoft.com/en-us/library/ff431782%28v=vs.92%29.aspx
- * http://create.msdn.com/en-US/education/quickstarts/Developing_with_the_Windows_Phone_GPS_%28Location_Services%29
- * http://msdn.microsoft.com/en-us/library/gg588383%28v=vs.92%29.aspx
- * http://msdn.microsoft.com/en-us/library/ff941093%28v=vs.92%29.aspx
- * http://msdn.microsoft.com/en-us/library/ee681883.aspx
- * http://msdn.microsoft.com/en-us/library/hh202984%28v=vs.92%29.aspx
- * http://slartoolkit.codeplex.com/wikipage?title=Beginner%27s%20Guide&referringTitle=Documentation
- * http://vimeo.com/27377090
- * http://vimeo.com/27378156
- * http://blog.markarteaga.com/AugmentedRealityAndWindowsPhone7.aspx
- * http://channel9.msdn.com/coding4fun/blog/GART-The-Geo-AR-Augmented-Reality-Toolkit-for-Windows-Phone-715
- * http://slartoolkit.codeplex.com/
- * http://msdn.microsoft.com/en-us/library/ff431803%28v=vs.92%29.aspx
- * 
- * http://mobiforge.com/designing/story/building-location-service-apps-windows-phone-7
- * 
- * reititys
- * http://blogs.msdn.com/b/ukmsdn/archive/2012/03/21/how-to-integrate-real-time-data-on-an-interactive-bing-map.aspx
- * http://msdn.microsoft.com/en-us/library/cc980922.aspx
- * http://blogs.msdn.com/b/mikebattista/archive/2011/01/18/geocoding-and-routing-with-bing-maps.aspx
-
- */
 namespace OmaKaupunki
 {
     public partial class MainPage : PhoneApplicationPage
     {
         GeoCoordinateWatcher watcher;
-        Menu menu;
         bool first = true;
         Pushpin pushpin;
         public MainPage()
@@ -133,11 +107,10 @@ namespace OmaKaupunki
             try
             {
                 Dataprovider dataprovider = new Dataprovider();
-                foreach(Menu tmp in App.menu){
-                    menu = tmp;
+                foreach(Menu menu in App.menu){
                     WebClient webClient = new WebClient();
                     webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadCompleted);
-                    webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + tmp.id + "&start_date=" + dataprovider.startTime));
+                    webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + menu.id + "&start_date=" + dataprovider.startTime), menu.url);
                 }
             }
             catch (Exception ex)
@@ -151,16 +124,19 @@ namespace OmaKaupunki
         {
             try
             {
-                model.Events data = JsonConvert.DeserializeObject<model.Events>(ex.Result);
-                ObservableCollection<Pushpin> events = data.toList(menu);
-                if (events == null)
-                    MessageBox.Show("Can't download events");
-                else
-                    foreach (Pushpin pushpin in events)
-                    {
-                        pushpin.MouseLeftButtonUp += new MouseButtonEventHandler(pushpin_MouseLeftButtonUp);
-                        map.Children.Add(pushpin);
-                    }
+                Uri url = ex.UserState as Uri;
+                if(url != null){
+                    model.Events data = JsonConvert.DeserializeObject<model.Events>(ex.Result);
+                    ObservableCollection<Pushpin> events = data.toList(url);
+                    if (events == null)
+                        MessageBox.Show("Can't download events");
+                    else
+                        foreach (Pushpin pushpin in events)
+                        {
+                            pushpin.MouseLeftButtonUp += new MouseButtonEventHandler(pushpin_MouseLeftButtonUp);
+                            map.Children.Add(pushpin);
+                        }
+                }
             }
             catch (Exception exc)
             {
