@@ -25,10 +25,16 @@
             <TextBlock x:Name="ApplicationTitle" Text="OMA KAUPUNKI" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock x:Name="PageTitle" Text="browse" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
-
         <StackPanel Grid.Row="1"
                     Margin="12,0,12,0">
             <toolkit:LongListSelector x:Name="longListSelector"/>
+            <ListBox Grid.Row="1"
+                     Margin="12,0,12,0"
+                     Name="listBox"
+                     ItemsSource="{Binding}"
+                     >
+                <ListBoxItem Content="{Binding title}"/>
+            </ListBox>
             <TextBlock Name="err"
                        Text="Can't find events!"
                        Style="{StaticResource PhoneTextLargeStyle}"
