@@ -13,6 +13,7 @@ using System.Text;
 using OmaKaupunki.model;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 /**
  * http://api.omakaupunki.fi/v1/event?api_key=262d6328-82f7-11e1-a468-000c29f7271d
@@ -70,6 +71,10 @@ namespace OmaKaupunki.controller
             try
             {
                 Events events = JsonConvert.DeserializeObject<Events>(e.Result);
+                if (events.toList() == null)
+                    MessageBox.Show("Null");
+                MessageBox.Show(events.toList()[0].title + "\n" + events.toList().Count);
+
             }
             catch (Exception ex)
             {
