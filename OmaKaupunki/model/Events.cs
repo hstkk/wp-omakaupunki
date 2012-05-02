@@ -28,6 +28,7 @@ namespace OmaKaupunki.model
             {
                 data = (from e in data
                         where e.show()
+                        orderby e.start_time
                         select e).ToArray<Event>();
                 foreach(Event e in data)
                     pushpins.Add(e.toPushpin(menu));
@@ -41,6 +42,7 @@ namespace OmaKaupunki.model
             {
                 List<Event> tmp = (from e in data
                                    where e.show()
+                                   orderby e.start_time
                                    select e).ToList<Event>();
                 return new ObservableCollection<Event>(tmp);
             }

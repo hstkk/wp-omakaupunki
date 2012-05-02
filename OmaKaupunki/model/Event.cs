@@ -55,36 +55,16 @@ namespace OmaKaupunki.model
             return boolean;
         }
 
-        /*public Event(int id, string title, string body, string url, DateTime start_time, DateTime end_time, DateTime created_at, double lat, double lon, int venue)
-        {
-            this.id = id;
-            this.title = title;
-            this.body = body;
-            this.url = url;
-            this.startTime = start_time;
-            this.endTime = end_time;
-            this.createdAt = created_at;
-            coordinate = new GeoCoordinate(lat, lon);
-            this.venue = venue;
-        }
-
-        public Event(int id, string title, string url, DateTime start_time, DateTime end_time, DateTime created_at, double lat, double lon)
-        {
-            this.id = id;
-            this.title = title;
-            this.url = url;
-            this.startTime = start_time;
-            this.endTime = end_time;
-            this.createdAt = created_at;
-            coordinate = new GeoCoordinate(lat, lon);
-        }*/
 
         public Pushpin toPushpin(Menu menu){
+            double tmpLat = 0, tmpLon = 0;
+            double.TryParse(lat.ToString(), out tmpLat);
+            double.TryParse(lon.ToString(), out tmpLon);
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(menu.url);
-
+            
             Pushpin pushpin = new Pushpin();
-//            pushpin.Location = new GeoCoordinate(lat, lon);
+            pushpin.Location = new GeoCoordinate(tmpLat, tmpLon);
             pushpin.Tag = id;
             pushpin.Content = new Rectangle()
             {
@@ -94,6 +74,14 @@ namespace OmaKaupunki.model
                 Width = 48
             };
             return pushpin;
+        }
+
+        public GeoCoordinate toGeoCoordinate()
+        {
+            double tmpLat = 0, tmpLon = 0;
+            double.TryParse(lat.ToString(), out tmpLat);
+            double.TryParse(lon.ToString(), out tmpLon);
+            return new GeoCoordinate(tmpLat, tmpLon);
         }
     }
 }

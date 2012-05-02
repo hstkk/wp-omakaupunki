@@ -20,6 +20,7 @@ namespace OmaKaupunki.views
 {
     public partial class Browse : PhoneApplicationPage
     {
+        int id;
         public Browse()
         {
             InitializeComponent();
@@ -28,7 +29,6 @@ namespace OmaKaupunki.views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             string tmp;
-            int id;
 
             if (NavigationContext.QueryString.TryGetValue("id", out tmp) && int.TryParse(tmp, out id))
             {
@@ -38,28 +38,28 @@ namespace OmaKaupunki.views
                 if (menu != null)
                 {
                     PageTitle.Text = menu.title;
-                    downloadEvents(id);
+                    download();
                 }
             }
         }
 
-        private void downloadEvents(int gategory)
+        private void download()
         {
             try
             {
                 Dataprovider dataprovider = new Dataprovider();
                 WebClient webClient = new WebClient();
-                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadEventsCompleted);
-                webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + gategory + "&start_date=" + dataprovider.startTime));
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadCompleted);
+                webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + id + "&start_date=" + dataprovider.startTime));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                //MessageBox.Show(ex.ToString());
                 err.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
-        private void downloadEventsCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void downloadCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             try
             {
@@ -69,14 +69,19 @@ namespace OmaKaupunki.views
                     err.Visibility = System.Windows.Visibility.Visible;
                 else
                     listBox.DataContext = events;
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                //MessageBox.Show(ex.ToString());
                 err.Visibility = System.Windows.Visibility.Visible;
             }
+            finally
+            {
+                performanceProgressBar.IsIndeterminate = false;
+            }
         }
-
+        
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs ex)
         {
             // If selected index is -1 (no selection) do nothing
@@ -84,7 +89,7 @@ namespace OmaKaupunki.views
                 return;
 
             model.Event e = listBox.SelectedItem as model.Event;
-            MessageBox.Show(e.id+"");
+            NavigationService.Navigate(new Uri("/Views/Event.xaml?id=" + e.id + "&category=" + id, UriKind.Relative));
 
             // Reset selected index to -1 (no selection)
             listBox.SelectedIndex = -1;
