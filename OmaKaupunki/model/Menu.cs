@@ -23,5 +23,10 @@ namespace OmaKaupunki.model
             this.id = id;
             url = new Uri("/OmaKaupunki;component/icons/" + this.id + ".png", UriKind.Relative);
         }
+
+        public override string ToString()
+        {
+            return title;
+        }
     }
 }

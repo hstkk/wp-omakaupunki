@@ -10,23 +10,21 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
-using System.Windows.Navigation;
+using OmaKaupunki.model;
 
-namespace OmaKaupunki
+namespace OmaKaupunki.views
 {
     public partial class Search : PhoneApplicationPage
     {
         public Search()
         {
             InitializeComponent();
+            DataContext = App.menu;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void search_Click(object sender, EventArgs e)
         {
-            string tmp;
-            int selectedIndex;
-            if (NavigationContext.QueryString.TryGetValue("pivot.SelectedIndex", out tmp) && int.TryParse(tmp, out selectedIndex))
-                pivot.SelectedIndex = selectedIndex;
+            NavigationService.Navigate(new Uri("/Views/Browse.xaml?area=" + (area.Items[area.SelectedIndex] as ListPickerItem).Tag.ToString() + "&start_date=" + when.Value.Value.ToString("yyyy-MM-dd") + "&category=" + (category.Items[category.SelectedIndex] as Menu).id + "&text=" + keyword.Text, UriKind.Relative));
         }
     }
 }

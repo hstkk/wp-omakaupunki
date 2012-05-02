@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using OmaKaupunki.model;
+using System.Globalization;
+using System.Threading;
 
 namespace OmaKaupunki
 {
@@ -37,6 +39,9 @@ namespace OmaKaupunki
         /// </summary>
         public App()
         {
+            CultureInfo cultureInfo = new CultureInfo("fi-FI");
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+
             // Global handler for uncaught exceptions. 
             UnhandledException += Application_UnhandledException;
 

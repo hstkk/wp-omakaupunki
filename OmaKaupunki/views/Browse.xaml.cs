@@ -21,9 +21,11 @@ namespace OmaKaupunki.views
     public partial class Browse : PhoneApplicationPage
     {
         int id;
+        Dataprovider dataprovider;
         public Browse()
         {
             InitializeComponent();
+            dataprovider = new Dataprovider();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -33,24 +35,32 @@ namespace OmaKaupunki.views
             if (NavigationContext.QueryString.TryGetValue("id", out tmp) && int.TryParse(tmp, out id))
             {
                 Menu menu = (from m in App.menu
-                            where m.id == id
-                            select m).First();
+                             where m.id == id
+                             select m).First();
                 if (menu != null)
                 {
                     PageTitle.Text = menu.title;
-                    download();
+                    download(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + id + "&start_date=" + dataprovider.startTime);
+                }
+            }
+            else
+            {
+                string area, start_date, keyword = "";
+                if(NavigationContext.QueryString.TryGetValue("area", out area) && NavigationContext.QueryString.TryGetValue("start_date", out start_date) && NavigationContext.QueryString.TryGetValue("category", out tmp) && int.TryParse(tmp, out id)){
+                    NavigationContext.QueryString.TryGetValue("text", out keyword);
+                    PageTitle.Text = "hakutulokset";
+                    download(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + id + "&start_date=" + start_date + "&area=" + area + (keyword != "" ? "&text=" + keyword : ""));
                 }
             }
         }
 
-        private void download()
+        private void download(string url)
         {
             try
             {
-                Dataprovider dataprovider = new Dataprovider();
                 WebClient webClient = new WebClient();
                 webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadCompleted);
-                webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + id + "&start_date=" + dataprovider.startTime));
+                webClient.DownloadStringAsync(new Uri(url));
             }
             catch (Exception ex)
             {
