@@ -68,7 +68,7 @@ namespace OmaKaupunki
                     body.Text = e.body;
                     if (e.url != null && e.url != "")
                     {
-                        url.Content = e.url;
+                        url.Visibility = System.Windows.Visibility.Visible;
                         uri = e.url; ;
                     }
 

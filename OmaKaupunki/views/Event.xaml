@@ -42,10 +42,10 @@
                                Style="{StaticResource PhoneTextSmallStyle}"/>
                     <TextBlock Name="startTime"
                                Style="{StaticResource PhoneTextLargeStyle}"/>
-                    <HyperlinkButton Name="url"
+                    <HyperlinkButton Content="URL"
+                                     Name="url"
                                      Click="url_Click"
-                                     HorizontalAlignment="Left"
-                                     text/>
+                                     HorizontalAlignment="Left"/>
                 </StackPanel>
             </controls:PivotItem>
 
