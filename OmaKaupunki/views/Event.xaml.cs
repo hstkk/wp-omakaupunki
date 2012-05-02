@@ -72,7 +72,12 @@ namespace OmaKaupunki
                         uri = e.url; ;
                     }
 
-                    startTime.Text = e.start_time.ToString();
+                    DateTime dateTime = new DateTime(1970,1,1,0,0,0,0);
+                    double timestamp = 0;
+                    string tmp = e.start_time.ToString();
+                    if (double.TryParse(e.start_time.ToString(), out timestamp))
+                        startTime.Text = dateTime.AddSeconds(timestamp).ToString();
+
                     GeoCoordinate geoCoordinate = e.toGeoCoordinate();
                     Pushpin pushpin = new Pushpin();
                     pushpin.Location = geoCoordinate;

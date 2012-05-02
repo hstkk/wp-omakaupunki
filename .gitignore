@@ -70,7 +70,6 @@ publish
 *.Publish.xml
 
 # Others
-[Bb]in
 [Oo]bj
 sql
 TestResults
