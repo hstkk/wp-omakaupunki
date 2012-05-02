@@ -37,6 +37,11 @@ namespace OmaKaupunki.model
         {
         }
 
+        public override string ToString()
+        {
+            return title;
+        }
+
         public bool show()
         {
             bool boolean = false;
@@ -46,7 +51,6 @@ namespace OmaKaupunki.model
                     boolean = true;
             }catch(Exception e)
             {
-                MessageBox.Show(e.ToString());
             }
             return boolean;
         }

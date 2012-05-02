@@ -19,4 +19,13 @@
     <ItemsPanelTemplate x:Key="wrap">
         <toolkit:WrapPanel/>
     </ItemsPanelTemplate>
+
+    <DataTemplate x:Key="menu">
+        <StackPanel>
+            <TextBlock Text="{Binding}"
+                       TextWrapping="Wrap"
+                       Style="{StaticResource PhoneTextExtraLargeStyle}"
+                       toolkit:TiltEffect.IsTiltEnabled="True"/>
+        </StackPanel>
+    </DataTemplate>
 </ResourceDictionary>
