@@ -107,7 +107,6 @@ namespace OmaKaupunki
         private void onPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             map.Center = e.Position.Location;
-            MessageBox.Show("kk");
             watcher.Stop();
         }
 
