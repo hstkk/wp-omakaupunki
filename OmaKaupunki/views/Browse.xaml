@@ -27,14 +27,10 @@
         </StackPanel>
         <StackPanel Grid.Row="1"
                     Margin="12,0,12,0">
-            <toolkit:LongListSelector x:Name="longListSelector"/>
-            <ListBox Grid.Row="1"
-                     Margin="12,0,12,0"
+            <ListBox ItemsSource="{Binding}"
+                     ItemTemplate="{StaticResource menu}"
                      Name="listBox"
-                     ItemsSource="{Binding}"
-                     >
-                <ListBoxItem Content="{Binding title}"/>
-            </ListBox>
+                     SelectionChanged="listBox_SelectionChanged"/>
             <TextBlock Name="err"
                        Text="Can't find events!"
                        Style="{StaticResource PhoneTextLargeStyle}"

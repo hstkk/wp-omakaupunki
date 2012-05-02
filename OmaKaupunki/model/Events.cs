@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Phone.Controls.Maps;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace OmaKaupunki.model
 {
@@ -20,9 +21,9 @@ namespace OmaKaupunki.model
         //public Pagination[] pagination;
         public Event[] data;
 
-        public List<Pushpin> toList(Menu menu)
+        public ObservableCollection<Pushpin> toList(Menu menu)
         {
-            List<Pushpin> pushpins = new List<Pushpin>();
+            ObservableCollection<Pushpin> pushpins = new ObservableCollection<Pushpin>();
             if (data != null && menu != null)
             {
                 data = (from e in data
@@ -34,23 +35,15 @@ namespace OmaKaupunki.model
             return pushpins;
         }
 
-/*        public List<Event> toList()
-        {
-            return (from e in data
-                    where e.id != null &&
-                    e.lat != null &&
-                    e.lon != null &&
-                    e.start_time != null &&
-                    e.body != null
-                    select e).ToList<Event>();
-        }*/
-
-        public List<Event> toList()
+        public ObservableCollection<Event> toList()
         {
             if (data != null)
-                return (from e in data
-                        where e.show()
-                        select e).ToList<Event>();
+            {
+                List<Event> tmp = (from e in data
+                                   where e.show()
+                                   select e).ToList<Event>();
+                return new ObservableCollection<Event>(tmp);
+            }
             else
                 return null;
         }

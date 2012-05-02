@@ -35,24 +35,24 @@ namespace OmaKaupunki.controller
 {
     public class Dataprovider
     {
-        private const string APIKEY = "262d6328-82f7-11e1-a468-000c29f7271d";
-        private const string APIURL = "http://api.omakaupunki.fi/v1/event/";
+        public string APIKEY = "262d6328-82f7-11e1-a468-000c29f7271d";
+        public string APIURL = "http://api.omakaupunki.fi/v1/event/";
         private const string STARTTIMEFORMAT = "yyyy-MM-dd";
-        private string startTime;
+        public string startTime;
+        ObservableCollection<model.Event> events;
 
         public Dataprovider()
         {
             startTime = (DateTime.Now).ToString(STARTTIMEFORMAT);
         }
 
-        public Events getEvents(int gategory)
+        public void getEvents(int gategory)
         {
-            return downloadEvents(gategory);
+            downloadEvents(gategory);
         }
 
-        private Events downloadEvents(int gategory)
+        private void downloadEvents(int gategory)
         {
-            Events events = new Events();
             try
             {
                 WebClient webClient = new WebClient();
@@ -63,18 +63,15 @@ namespace OmaKaupunki.controller
             {
                 MessageBox.Show("Can not download events");
             }
-            return events;
         }
 
         private void downloadEventsCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             try
             {
-                Events events = JsonConvert.DeserializeObject<Events>(e.Result);
-                if (events.toList() == null)
-                    MessageBox.Show("Null");
-                MessageBox.Show(events.toList()[0].title + "\n" + events.toList().Count);
-
+                Events data = JsonConvert.DeserializeObject<Events>(e.Result);
+                if (data.toList() != null)
+                    events = data.toList();
             }
             catch (Exception ex)
             {

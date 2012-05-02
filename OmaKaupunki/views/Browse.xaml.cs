@@ -13,8 +13,8 @@ using Microsoft.Phone.Controls;
 using OmaKaupunki.controller;
 using OmaKaupunki.model;
 using System.Windows.Navigation;
-using System.Linq;
-
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace OmaKaupunki.views
 {
@@ -29,8 +29,6 @@ namespace OmaKaupunki.views
         {
             string tmp;
             int id;
-            Events events;
-            Dataprovider dataprovider = new Dataprovider();
 
             if (NavigationContext.QueryString.TryGetValue("id", out tmp) && int.TryParse(tmp, out id))
             {
@@ -39,22 +37,57 @@ namespace OmaKaupunki.views
                             select m).First();
                 if (menu != null)
                 {
-                    PageTitle.Text = menu.title.ToLower();
-                    events = dataprovider.getEvents(id);
-                    List<model.Event> data = events.toList();
-                    listBox.DataContext = data;
-                    if(data == null)
-                        err.Visibility = System.Windows.Visibility.Visible;
+                    PageTitle.Text = menu.title;
+                    downloadEvents(id);
                 }
             }
-            else
+        }
+
+        private void downloadEvents(int gategory)
+        {
+            try
             {
-                PageTitle.Text = "hakutulokset";                
+                Dataprovider dataprovider = new Dataprovider();
+                WebClient webClient = new WebClient();
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadEventsCompleted);
+                webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + gategory + "&start_date=" + dataprovider.startTime));
             }
-            /*if (events != null)
-                longListSelector.DataContext = events.toList();
-            else
-                err.Visibility = System.Windows.Visibility.Visible;*/
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                err.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void downloadEventsCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            try
+            {
+                model.Events data = JsonConvert.DeserializeObject<model.Events>(e.Result);
+                ObservableCollection<model.Event> events = data.toList();
+                if (events == null)
+                    err.Visibility = System.Windows.Visibility.Visible;
+                else
+                    listBox.DataContext = events;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                err.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs ex)
+        {
+            // If selected index is -1 (no selection) do nothing
+            if (listBox.SelectedIndex == -1)
+                return;
+
+            model.Event e = listBox.SelectedItem as model.Event;
+            MessageBox.Show(e.id+"");
+
+            // Reset selected index to -1 (no selection)
+            listBox.SelectedIndex = -1;
         }
     }
 }
