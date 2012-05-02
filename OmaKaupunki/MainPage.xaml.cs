@@ -48,6 +48,8 @@ namespace OmaKaupunki
     {
         GeoCoordinateWatcher watcher;
         Menu menu;
+        bool first = true;
+        Pushpin pushpin;
         public MainPage()
         {
             InitializeComponent();
@@ -99,7 +101,15 @@ namespace OmaKaupunki
 
         private void onPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
+            if (first)
+            {
+                pushpin = new Pushpin();
+                pushpin.Background = new SolidColorBrush(Colors.Red);
+                map.Children.Add(pushpin);
+                first = false;
+            }
             map.Center = e.Position.Location;
+            pushpin.Location = e.Position.Location;
             watcher.Stop();
         }
 

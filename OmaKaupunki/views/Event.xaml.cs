@@ -17,6 +17,9 @@ using Newtonsoft.Json;
 using Microsoft.Phone.Controls.Maps;
 using System.Device.Location;
 using Microsoft.Phone.Tasks;
+using OmaKaupunki.RouteService;
+using System.Collections.ObjectModel;
+using Microsoft.Phone.Controls.Maps.Platform;
 
 namespace OmaKaupunki
 {
@@ -27,6 +30,8 @@ namespace OmaKaupunki
         GeoCoordinateWatcher watcher;
         bool first = true;
         Pushpin pushpin;
+        GeoCoordinate geoCoordinate;
+        MapPolyline mapPolyline;
 
         public Event()
         {
@@ -85,12 +90,13 @@ namespace OmaKaupunki
                     if (double.TryParse(e.start_time.ToString(), out timestamp))
                         startTime.Text = dateTime.AddSeconds(timestamp).ToString("HH:mm d.M.yyyy");
 
-                    GeoCoordinate geoCoordinate = e.toGeoCoordinate();
+                    geoCoordinate = e.toGeoCoordinate();
 
                     smallMap.Center = geoCoordinate;
                     smallMap.Children.Add(e.toPushpin());
 
                     map.Children.Add(e.toPushpin());
+                    geocode();
                 }
             }
             catch (Exception exc)
@@ -119,12 +125,56 @@ namespace OmaKaupunki
             if (first)
             {
                 pushpin = new Pushpin();
-                pushpin.Content = "Minä";
+                pushpin.Background = new SolidColorBrush(Colors.Red);
                 map.Children.Add(pushpin);
+
+                mapPolyline = new MapPolyline();
+                //mapPolyline.Fill = new SolidColorBrush(Colors.Black);
+                mapPolyline.Stroke = new SolidColorBrush(Colors.Black);
+                mapPolyline.StrokeThickness = 4;
+                map.Children.Add(mapPolyline);
                 first = false;
             }
             map.Center = e.Position.Location;
             pushpin.Location = e.Position.Location;
+            map.Center = e.Position.Location;
+            geocode();
+        }
+
+        private void geocode()
+        {
+            if (pushpin.Location != null && geoCoordinate != null)
+            {
+                Waypoint from = new Waypoint();
+                from.Location = pushpin.Location;
+                Waypoint to = new Waypoint();
+                to.Location = geoCoordinate;
+                var routeRequest = new RouteRequest();
+                routeRequest.Credentials = new Credentials();
+                routeRequest.Credentials.ApplicationId = "ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS";
+                routeRequest.Waypoints = new ObservableCollection<Waypoint>();
+                routeRequest.Waypoints.Add(from);
+                routeRequest.Waypoints.Add(to);
+                routeRequest.Options = new RouteOptions();
+                routeRequest.Options.RoutePathType = RoutePathType.Points;
+                routeRequest.UserProfile = new UserProfile();
+                routeRequest.UserProfile.DistanceUnit = DistanceUnit.Kilometer;
+
+                var routeClient = new RouteServiceClient("BasicHttpBinding_IRouteService");
+                routeClient.CalculateRouteCompleted += new EventHandler<CalculateRouteCompletedEventArgs>(OnRouteComplete);
+                routeClient.CalculateRouteAsync(routeRequest);
+            }
+        }
+
+        private void OnRouteComplete(object sender, CalculateRouteCompletedEventArgs e)
+        {
+            if (e.Result != null && e.Result.Result != null
+              && e.Result.Result.Legs != null & e.Result.Result.Legs.Any())
+            {
+                mapPolyline.Locations = new LocationCollection();
+                foreach (Location location in e.Result.Result.RoutePath.Points)
+                    mapPolyline.Locations.Add(new GeoCoordinate(location.Latitude, location.Longitude));
+            }
         }
     }
 }
