@@ -21,11 +21,26 @@
     </ItemsPanelTemplate>
 
     <DataTemplate x:Key="menu">
-        <StackPanel>
+        <!--<StackPanel Margin="0,0,0,12"
+                    toolkit:TiltEffect.IsTiltEnabled="True">
             <TextBlock Text="{Binding}"
                        TextWrapping="Wrap"
-                       Style="{StaticResource PhoneTextExtraLargeStyle}"
-                       toolkit:TiltEffect.IsTiltEnabled="True"/>
-        </StackPanel>
+                       Style="{StaticResource PhoneTextNormalStyle}"/>
+        </StackPanel>-->
+        <Grid Width="173"
+              Height="173"
+              Margin="12,12,0,0"
+              Background="{StaticResource PhoneAccentBrush}"
+              toolkit:TiltEffect.IsTiltEnabled="True">
+            <TextBlock Text="{Binding}"
+                       Style="{StaticResource PhoneTextLargeStyle}"
+                       Foreground="White"
+                       Margin="12,12,12,12"
+                       VerticalAlignment="Top"
+                       TextWrapping="Wrap"/>
+        </Grid>
     </DataTemplate>
+
+    <Style TargetType="TextBlock"
+           BasedOn="{StaticResource PhoneTextNormalStyle}"/>
 </ResourceDictionary>

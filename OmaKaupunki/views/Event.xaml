@@ -12,7 +12,8 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -21,26 +22,42 @@
             <!--Pivot item one-->
             <controls:PivotItem Header="event">
                 <StackPanel>
-                    <TextBlock Text="title"/>
-                    <TextBlock Name="title"/>
-                    <TextBlock Text="category"/>
-                    <TextBlock Name="category"/>
-                    <TextBlock Text="body"/>
+                    <toolkit:PerformanceProgressBar x:Name="performanceProgressBar"
+                                                IsIndeterminate="True"/>
+                    <TextBlock Name="err"
+                           Text="Can't find event!"
+                           Style="{StaticResource PhoneTextLargeStyle}"
+                           Visibility="Collapsed"/>
+                    <my:Map Grid.Row="1"
+                            x:Name="smallMap"
+                            CopyrightVisibility="Collapsed"
+                            CredentialsProvider="ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS"
+                            ZoomLevel="15"
+                            LogoVisibility="Collapsed"
+                            Height="150"/>
+                    <TextBlock Name="title"
+                               Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                     <TextBlock Name="body"/>
-                    <TextBlock Text="startTime"/>
-                    <TextBlock Name="startTime"/>
-                    <TextBlock Text="endTime"/>
-                    <TextBlock Name="endTime"/>
-                    <TextBlock Text="venue"/>
-                    <TextBlock Name="venue"/>
-                    <HyperlinkButton Content="URL" Name="url"/>
+                    <TextBlock Text="start time"
+                               Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Name="startTime"
+                               Style="{StaticResource PhoneTextLargeStyle}"/>
+                    <HyperlinkButton Name="url"
+                                     Click="url_Click"
+                                     HorizontalAlignment="Left"
+                                     text/>
                 </StackPanel>
             </controls:PivotItem>
 
             <!--Pivot item two-->
             <controls:PivotItem Header="map">
                 <Grid>
-                    <my:Map Grid.Row="1" Margin="12,0,12,0" x:Name="map"/>
+                    <my:Map Grid.Row="1"
+                            x:Name="map"
+                            CopyrightVisibility="Collapsed"
+                            CredentialsProvider="ApZpEXNsiRGhzmE5IhahV7br5q95s3jp8VehZSXw5Ol2B47Dc-v2rXcncW8BWJzS"
+                            ZoomLevel="10"
+                            LogoVisibility="Collapsed"/>
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
