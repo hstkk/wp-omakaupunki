@@ -49,7 +49,7 @@ namespace OmaKaupunki
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                //MessageBox.Show(ex.ToString());
                 err.Visibility = System.Windows.Visibility.Visible;
             }
         }
@@ -76,20 +76,23 @@ namespace OmaKaupunki
                     double timestamp = 0;
                     string tmp = e.start_time.ToString();
                     if (double.TryParse(e.start_time.ToString(), out timestamp))
-                        startTime.Text = dateTime.AddSeconds(timestamp).ToString();
+                        startTime.Text = dateTime.AddSeconds(timestamp).ToString("HH:mm d.M.yyyy");
 
                     GeoCoordinate geoCoordinate = e.toGeoCoordinate();
+
                     Pushpin pushpin = new Pushpin();
                     pushpin.Location = geoCoordinate;
-
                     smallMap.Center = geoCoordinate;
                     smallMap.Children.Add(pushpin);
-                    map.Children.Add(pushpin);
+
+                    Pushpin pushpin2 = new Pushpin();
+                    pushpin2.Location = geoCoordinate;
+                    map.Children.Add(pushpin2);
                 }
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                //MessageBox.Show(exc.ToString());
                 err.Visibility = System.Windows.Visibility.Visible;
             }
             finally
