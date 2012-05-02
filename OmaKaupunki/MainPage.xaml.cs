@@ -11,6 +11,12 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.Device.Location;
+using OmaKaupunki.controller;
+using OmaKaupunki.model;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using Microsoft.Phone.Controls.Maps;
+
 /*
  * usb stroage http://forum.xda-developers.com/showthread.php?t=1069568
  * 
@@ -34,28 +40,14 @@ using System.Device.Location;
  * http://blogs.msdn.com/b/ukmsdn/archive/2012/03/21/how-to-integrate-real-time-data-on-an-interactive-bing-map.aspx
  * http://msdn.microsoft.com/en-us/library/cc980922.aspx
  * http://blogs.msdn.com/b/mikebattista/archive/2011/01/18/geocoding-and-routing-with-bing-maps.aspx
- * 
- * 
- * json
- * http://msdn.microsoft.com/en-us/library/system.runtime.serialization.datacontractjsonserializer%28v=VS.90%29.aspx?appId=Dev10IDEF1&l=EN-US&k=k%28DATACONTRACTJSONSERIALIZER%29&rd=true
- * http://msdn.microsoft.com/en-us/library/bb412179.aspx
- * http://pietschsoft.com/post/2008/02/NET-35-JSON-Serialization-using-the-DataContractJsonSerializer.aspx
- * http://www.smallandmighty.net/blog/using-json-with-windows-phone
- * 
- * hubtile
- * http://www.windowsphonegeek.com/articles/Windows-Phone-HubTile-in-depth-Part1-key-concepts-and-API
- * http://www.windowsphonegeek.com/articles/How-to-Programmatically-switch-the-HubTile-Visual-States
- * http://blog.humann.info/post/2011/11/06/Silverlight-Toolkit-bug-on-HubTile-control-the-solution.aspx
- * http://www.windowsphonegeek.com/articles/Programmatically-changing-Visual-States-of-HubTile-controls-used-as-ListBox-Items
- * http://www.windowsphonegeek.com/articles/Windows-Phone-HubTile-in-depth-Part3-Freezing-and-Unfreezing-tiles
- * http://stackoverflow.com/questions/9149812/unable-to-put-images-into-hub-tile
- * http://igrali.wordpress.com/2011/08/19/how-to-use-the-hubtile-control/
+
  */
 namespace OmaKaupunki
 {
     public partial class MainPage : PhoneApplicationPage
     {
         GeoCoordinateWatcher watcher;
+        Menu menu;
         public MainPage()
         {
             InitializeComponent();
@@ -64,6 +56,7 @@ namespace OmaKaupunki
             watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(onStatusChanged);
             watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(onPositionChanged);
             watcher.Start();
+            download();
         }
 
         private void onStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -124,5 +117,64 @@ namespace OmaKaupunki
         {
             NavigationService.Navigate(new Uri("/views/Search.xaml", UriKind.Relative));
         }
+
+        private void download()
+        {
+            try
+            {
+                Dataprovider dataprovider = new Dataprovider();
+                foreach(Menu tmp in App.menu){
+                    menu = tmp;
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(downloadCompleted);
+                    webClient.DownloadStringAsync(new Uri(dataprovider.APIURL + "search?api_key=" + dataprovider.APIKEY + "&category=" + tmp.id + "&start_date=" + dataprovider.startTime));
+                }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());
+                MessageBox.Show("Can't download events");
+            }
+        }
+
+        private void downloadCompleted(object sender, DownloadStringCompletedEventArgs ex)
+        {
+            try
+            {
+                model.Events data = JsonConvert.DeserializeObject<model.Events>(ex.Result);
+                ObservableCollection<Pushpin> events = data.toList(menu);
+                if (events == null)
+                    MessageBox.Show("Can't download events");
+                else
+                    foreach (Pushpin pushpin in events)
+                    {
+                        pushpin.MouseLeftButtonUp += new MouseButtonEventHandler(pushpin_MouseLeftButtonUp);
+                        map.Children.Add(pushpin);
+                    }
+            }
+            catch (Exception exc)
+            {
+                //MessageBox.Show(exc.ToString());
+                MessageBox.Show("Can't download events");
+            }
+            finally
+            {
+                performanceProgressBar.IsIndeterminate = false;
+            }
+        }
+
+        void pushpin_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                Pushpin pushpin = sender as Pushpin;
+                int id = 0;
+                if(int.TryParse(pushpin.Tag.ToString(), out id))
+                    NavigationService.Navigate(new Uri("/views/Event.xaml?id=" + id, UriKind.Relative));
+            }
+            catch (Exception ex)
+            {
+            }
+        }   
     }
 }

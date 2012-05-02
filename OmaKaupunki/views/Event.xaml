@@ -21,6 +21,8 @@
         <controls:Pivot Title="OMA KAUPUNKI">
             <!--Pivot item one-->
             <controls:PivotItem Header="event">
+                <ScrollViewer Width="454"
+                              Height="600">
                 <StackPanel>
                     <toolkit:PerformanceProgressBar x:Name="performanceProgressBar"
                                                 IsIndeterminate="True"/>
@@ -36,17 +38,21 @@
                             LogoVisibility="Collapsed"
                             Height="150"/>
                     <TextBlock Name="title"
-                               Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                    <TextBlock Name="body"/>
+                               Style="{StaticResource PhoneTextExtraLargeStyle}"
+                               TextWrapping="Wrap"/>
+                    <TextBlock Name="body"
+                               TextWrapping="Wrap"/>
                     <TextBlock Text="start time"
                                Style="{StaticResource PhoneTextSmallStyle}"/>
                     <TextBlock Name="startTime"
-                               Style="{StaticResource PhoneTextLargeStyle}"/>
+                               Style="{StaticResource PhoneTextLargeStyle}"
+                               TextWrapping="Wrap"/>
                     <HyperlinkButton Content="URL"
                                      Name="url"
                                      Click="url_Click"
                                      HorizontalAlignment="Left"/>
                 </StackPanel>
+                </ScrollViewer>
             </controls:PivotItem>
 
             <!--Pivot item two-->
